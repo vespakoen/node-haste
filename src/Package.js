@@ -20,7 +20,7 @@ class Package {
       if (!replacement) {
         return path.join(this.root, main);
       }
-      return replacement;
+      return path.join(this.root, replacement);
     });
   }
 
@@ -39,11 +39,12 @@ class Package {
       replacements[relPathWithoutExt + '.js'],
       replacements[relPathWithoutExt + '.json'],
     ];
-    const matches = checks.filter(check => check !== undefined);
-    if (matches[0] === false) {
-      return false;
+    for (let i = 0; i < checks.length; i++) {
+      if (checks[i] !== undefined) {
+        return checks[i];
+      }
     }
-    return matches[0] || undefined;
+    return undefined;
   }
 
   isHaste() {
@@ -72,6 +73,7 @@ class Package {
       const replacements = getReplacements(json);
       const allReplacements = { ...globalReplacements, ...replacements };
       const replacement = this.getReplacement(name, allReplacements);
+
       if (replacement === false) {
         return false;
       }
