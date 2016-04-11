@@ -14,13 +14,14 @@ class Package {
 
   getMain() {
     return this.read().then(json => {
-      const main = json.main || 'index';
+      let main = json.main || 'index';
       var replacements = getReplacements(json);
       var replacement = this.getReplacement(main, replacements);
-      if (!replacement) {
-        return path.join(this.root, main);
+      // find a possible replacement
+      if (replacement !== undefined) {
+        main = replacement;
       }
-      return path.join(this.root, replacement);
+      return path.join(this.root, main);
     });
   }
 
@@ -80,6 +81,11 @@ class Package {
 
       if (replacement === undefined) {
         return name;
+      }
+
+      // replacement is other module (or absolute path?)
+      if (replacement[0] !== '.') {
+        return replacement;
       }
 
       return path.join(this.root, replacement);
