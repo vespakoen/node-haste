@@ -104,19 +104,15 @@ class Package {
 }
 
 function getReplacements(pkg) {
-  let browserify = pkg.browserify || {};
   let browser = pkg.browser || {};
   let rn = pkg['react-native'] || {};
-  if (typeof browserify === 'string') {
-    browserify = { [pkg.main || 'index']: browserify };
-  }
   if (typeof browser === 'string') {
     browser = { [pkg.main || 'index']: browser };
   }
   if (typeof rn === 'string') {
     rn = { [pkg.main || 'index']: rn };
   }
-  return { ...browserify, ...browser, ...rn };
+  return { ...browser, ...rn };
 }
 
 module.exports = Package;
